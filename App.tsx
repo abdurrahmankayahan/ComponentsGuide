@@ -11,12 +11,17 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import RootStackNavigation from './src/navigation/RootStackNavigation';
+import { ThemeProvider, useTheme } from './src/theme/ThemeContext';
+
+
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
+    
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider >
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <AppContent />
     </SafeAreaProvider>
@@ -25,14 +30,19 @@ function App() {
 
 function AppContent() {
   const safeAreaInsets = useSafeAreaInsets();
-
   return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
+    <ThemeProvider>
+      <SafeAreaProvider >
+        <RootStackNavigation></RootStackNavigation>
+      </SafeAreaProvider>
+    </ThemeProvider>
+
+    // <View style={styles.container}>
+    //   <NewAppScreen
+    //     templateFileName="App.tsx"
+    //     safeAreaInsets={safeAreaInsets}
+    //   />
+    // </View>
   );
 }
 
