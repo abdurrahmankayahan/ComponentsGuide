@@ -29,6 +29,8 @@ const TabNavigation = () => {
        // headerBackground:()=><View style={{flex:1, backgroundColor:theme.theme.primary}}></View>,
         tabBarBackground:()=><View style={{flex:1, backgroundColor:theme.theme.background}}></View>,
         headerTransparent:true,
+        headerTintColor:theme.theme.primary,
+        headerTitle:"",
         headerRight: () => (
             <TouchableOpacity
               style={{
@@ -45,6 +47,7 @@ const TabNavigation = () => {
               <Icon
                 name={themes === 'light' ? 'sun' : 'moon'}
                 size={30}
+                color={theme.theme.onBackground}
               />
             </TouchableOpacity>
           ),
@@ -61,7 +64,7 @@ const TabNavigation = () => {
             iconName = 'gear';
           }
 
-          return <Icon name={iconName!} size={focused ? size + 2 : size } color={focused?theme.theme.primary:theme.theme.textPrimary} />;
+          return <Icon name={iconName!} size={focused ? size + 2 : size } color={focused?theme.theme.primary:theme.theme.onBackground} />;
         },
       })}
     >

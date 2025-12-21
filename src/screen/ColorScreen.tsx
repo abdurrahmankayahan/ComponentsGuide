@@ -12,7 +12,7 @@ import {
 import ColorPicker from 'react-native-wheel-color-picker';
 import { generateTheme } from '../utils/color';
 import { useTheme } from '../theme/ThemeContext';
-import { darkTheme, lightTheme } from '../theme/themes';
+import { darkTheme, lightTheme, Theme, themeUsageGuide } from '../theme/themes';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
 interface Palette {
@@ -21,16 +21,6 @@ interface Palette {
   dark: string;
   accent: string;
   complementary: string;
-}
-interface Theme {
-  background: string;
-  surface: string;
-  primary: string;
-  secondary: string;
-  accent: string;
-  textPrimary: string;
-  textSecondary: string;
-  border: string;
 }
 
 const ColorScreen = () => {
@@ -70,50 +60,58 @@ const ColorScreen = () => {
   const applyToTheme = () => {
     if (!palette) return;
 
-    const customTheme = toggleTheme?lightTheme!:darkTheme!;
+    const customTheme: Theme = toggleTheme ? lightTheme! : darkTheme!;
 
-    setCustomTheme(customTheme,toggleTheme?"ligth":"dark");
+    setCustomTheme(customTheme, toggleTheme ? 'ligth' : 'dark');
     Alert.alert('Başarılı', 'Renk paleti tema olarak uygulandı!');
+  };
+  const formatUsageText = (key: keyof typeof themeUsageGuide) => {
+    const item = themeUsageGuide[key];
+
+    if (!item) return 'Bilgi bulunamadı';
+
+    return (
+      `${item.description}\n\n` +
+      `Kullanım Alanları:\n` +
+       `-----------------------\n` +
+      item.usage.map(u => `• ${u}`).join('\n')
+    );
   };
 
   const renderColorBox = (color: string, label: string, key: keyof Theme) => (
-    <View key={label} style={styles.colorItem}>
-      <View style={[styles.colorBox, { backgroundColor: color }]} />
-      <Text style={styles.colorText}>{label}</Text>
-      <TextInput
-        style={styles.colorInput}
-        value={color}
-        onChangeText={value => updatePaletteColor(key, value)}
-        placeholder="#000000"
-        maxLength={7}
-      />
-    </View>
+    <TouchableOpacity
+    key={label}
+      onLongPress={() => {
+        Alert.alert(label, formatUsageText(key));
+      }}
+    >
+      <View key={label} style={styles.colorItem}>
+        <View style={[styles.colorBox, { backgroundColor: color }]} />
+        <Text style={styles.colorText}>{label}</Text>
+        <TextInput
+          style={styles.colorInput}
+          value={color}
+          onChangeText={value => updatePaletteColor(key, value)}
+          placeholder="#000000"
+          maxLength={7}
+        />
+      </View>
+    </TouchableOpacity>
   );
 
   return (
     <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: theme.background },
-      ]}
+      style={[styles.container, { backgroundColor: theme.background }]}
     >
       <ScrollView>
-        <Text style={[styles.title, { color: theme.textPrimary }]}>
+        <Text style={[styles.title, { color: theme.onBackground }]}>
           Color Palette Generator
         </Text>
 
         <View
-          style={[
-            styles.pickerContainer,
-            { backgroundColor: theme.surface },
-          ]}
+          style={[styles.pickerContainer, { backgroundColor: theme.surface }]}
         >
-          <Text
-            style={[
-              styles.selectedColorText,
-              { color: theme.textPrimary },
-            ]}
-          >
+          <Text style={[styles.selectedColorText, { color: theme.onSurface }]}>
             Selected Color: {baseColor.toUpperCase()}
           </Text>
 
@@ -150,13 +148,21 @@ const ColorScreen = () => {
                 backgroundColor: theme.background,
               }}
             >
-              <Text style={[styles.paletteTitle,{color:theme.textPrimary}]}>Genereted Colors {toggleTheme?"(Light)":"(Dark)"}</Text>
+              <Text
+                style={[styles.paletteTitle, { color: theme.onBackground }]}
+              >
+                Genereted Colors {toggleTheme ? '(Light)' : '(Dark)'}
+              </Text>
               <TouchableOpacity
                 onPress={() => {
                   setToggleTheme(!toggleTheme);
                 }}
               >
-                <Icon name={toggleTheme ? 'moon' : 'sun'} size={30} color={theme.textPrimary} />
+                <Icon
+                  name={toggleTheme ? 'moon' : 'sun'}
+                  size={30}
+                  color={theme.onBackground}
+                />
               </TouchableOpacity>
             </View>
 

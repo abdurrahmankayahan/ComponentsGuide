@@ -1,9 +1,11 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { lightTheme, darkTheme } from './themes';
+import { lightTheme, darkTheme, Spacing, Typography } from './themes';
 
 export type ThemeContextType = {
   theme: typeof lightTheme;
+  spacing:typeof Spacing;
+  typography:typeof Typography;
   toggleTheme: () => void;
   setCustomTheme: (customTheme: typeof lightTheme,type:"dark"|"ligth") => void;
 };
@@ -15,6 +17,9 @@ type Props = {
 
 export const ThemeProvider = ({ children }: Props) => {
   const [theme, setTheme] = useState(lightTheme);
+  const [spacing, setSpacing] = useState(Spacing);
+  const [typography, setTypography] = useState(Typography);
+
 
   const toggleTheme = async () => {
     const next = theme === lightTheme ? darkTheme : lightTheme;
@@ -28,7 +33,7 @@ export const ThemeProvider = ({ children }: Props) => {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, setCustomTheme }}>
+    <ThemeContext.Provider value={{ theme,spacing,typography, toggleTheme, setCustomTheme }}>
       {children}
     </ThemeContext.Provider>
   );

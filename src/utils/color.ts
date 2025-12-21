@@ -1,4 +1,9 @@
 import tinycolor from 'tinycolor2';
+import { Theme } from '../theme/themes';
+
+/* ============================
+   TYPES
+============================ */
 
 interface Palette {
   base: string;
@@ -8,16 +13,34 @@ interface Palette {
   complementary: string;
 }
 
-interface Theme {
-  background: string;
-  surface: string;
-  primary: string;
-  secondary: string;
-  accent: string;
-  textPrimary: string;
-  textSecondary: string;
-  border: string;
-}
+
+
+/* ============================
+   CONSTANTS
+============================ */
+
+const MIN_CONTRAST = 4.5;
+
+/* ============================
+   ON COLOR HELPER
+============================ */
+
+const getOnColor = (bg: string): string => {
+  const white = '#FFFFFF';
+  const black = '#000000';
+
+  const whiteC = tinycolor.readability(bg, white);
+  const blackC = tinycolor.readability(bg, black);
+
+  if (whiteC >= MIN_CONTRAST) return white;
+  if (blackC >= MIN_CONTRAST) return black;
+
+  return whiteC > blackC ? white : black;
+};
+
+/* ============================
+   THEME GENERATOR
+============================ */
 
 export const generateTheme = (
   baseColor: string,
@@ -28,57 +51,77 @@ export const generateTheme = (
 } => {
   const base = tinycolor(baseColor);
 
-  /* -------------------- */
-  /* 1️⃣ PALETTE */
-  /* -------------------- */
+  /* --------------------
+     1️⃣ PALETTE
+  -------------------- */
+
   const palette: Palette = {
     base: base.toHexString(),
-
-    light: base.clone().spin(20).toHexString(),
+    light: base.clone().spin(20).lighten(10).toHexString(),
     dark: base.clone().darken(20).toHexString(),
-
     accent: base.clone().spin(170).toHexString(),
     complementary: base.clone().complement().toHexString(),
   };
 
-  /* -------------------- */
-  /* 2️⃣ LIGHT THEME */
-  /* -------------------- */
+  /* --------------------
+     2️⃣ LIGHT THEME
+  -------------------- */
+
+  const lightBackground = tinycolor('#FFFFFF').darken(5).toHexString();
+  const lightSurface = tinycolor('#FFFFFF').darken(9).toHexString();
+  const lightPrimary = palette.base;
+  const lightSecondary = palette.light;
+  const lightAccent = palette.accent;
+
   const light: Theme = {
-    background: tinycolor('#fff').darken(5).toHexString(),
-    surface:  tinycolor('#fff').darken(5).darken(4).toHexString(),
+  
+    primary: lightPrimary,
+    secondary: lightSecondary,
+    accent: lightAccent,
+    
+    
+    onPrimary: getOnColor(lightPrimary),
+    onSecondary: getOnColor(lightSecondary),
+    onAccent: getOnColor(lightAccent),
 
-    primary: palette.base,
-    secondary: palette.light,
-    accent: palette.accent,
 
-    // 🔹 Okunabilirlik için sabit ve test edilmiş değerler
-    textPrimary: '#111827', // gray-900
-    textSecondary: '#4B5563', // gray-600
+      background: lightBackground,
+      surface: lightSurface,
+      border: base.clone().lighten(42).desaturate(25).toHexString(),
+      
+      onBackground: getOnColor(lightBackground),
+      onSurface: getOnColor(lightSurface),
 
-    border: base.clone().lighten(42).desaturate(25).toHexString(),
   };
 
-  /* -------------------- */
-  /* 3️⃣ DARK THEME */
-  /* -------------------- */
+  /* --------------------
+     3️⃣ DARK THEME
+  -------------------- */
+
+  const darkBackground = tinycolor('#000000').lighten(10).toHexString();
+  const darkSurface = tinycolor('#000000').lighten(18).toHexString();
+  const darkPrimary = base.clone().lighten(14).saturate(6).toHexString();
+  const darkSecondary = palette.light;
+  const darkAccent = palette.accent;
+
   const dark: Theme = {
-    background: tinycolor('#000').lighten(10).toHexString(),
-    surface:  tinycolor('#000').lighten(10).lighten(8).toHexString(),
-
-
-    // 🔹 Dark mode'da primary mutlaka açılmalı
-    primary: base.clone().lighten(14).saturate(6).toHexString(),
+   
+    primary: darkPrimary,
+    secondary: darkSecondary,
+    accent: darkAccent,
     
-    secondary: palette.light,
+    onPrimary: getOnColor(darkPrimary),
+    onSecondary: getOnColor(darkSecondary),
+    onAccent: getOnColor(darkAccent),
 
-    // 🔹 Accent daha az patlak
-    accent: palette.accent,
-
-    textPrimary: '#E5E7EB', // gray-200
-    textSecondary: '#9CA3AF', // gray-400
-
+    background: darkBackground,
+    surface: darkSurface,
     border: base.clone().darken(35).desaturate(30).toHexString(),
+
+    onBackground: getOnColor(darkBackground),
+    onSurface: getOnColor(darkSurface),
+
+     
   };
 
   return { palette, light, dark };

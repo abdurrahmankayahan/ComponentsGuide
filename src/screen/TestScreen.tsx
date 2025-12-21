@@ -1,8 +1,10 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Button from '../components/Button';
+
 import { useTheme } from '../theme/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from '../components/Button/Button';
+
 
 const TestScreen = () => {
   const theme = useTheme();
@@ -14,7 +16,7 @@ const TestScreen = () => {
    
 
       <View style={styles.container}>
-        <Button />
+        <Button label='Button'  variant="primary"  />
       </View>
 
     </SafeAreaView>
