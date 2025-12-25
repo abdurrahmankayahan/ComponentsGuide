@@ -33,8 +33,8 @@ export const lightTheme: Theme = {
   onAccent: '#FFFFFF',
 
 
-  background: '#F9FAFB',
-  surface: '#FFFFFF',
+  background: '#eee',
+  surface: '#ddd',
   border: '#E4E7F5',
   
   onBackground: '#111827',   // eski textPrimary
@@ -51,8 +51,8 @@ export const darkTheme: Theme = {
   onSecondary: '#0F172A',   // açık secondary → koyu text
   onAccent: '#0F172A',
 
-  background: '#0F172A',
-  surface: '#020617',
+  background: '#333',
+  surface: '#222',
   border: '#1E293B',
   
   onBackground: '#E5E7EB',   // eski textPrimary

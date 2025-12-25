@@ -1,5 +1,11 @@
 import React from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import {
+  DimensionValue,
+  FlexStyle,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { Spacing } from '../../theme/themes';
 import { useTheme } from '../../theme/ThemeContext';
 
@@ -36,7 +42,7 @@ export const BoxPropsConfig = {
   },
   style: {
     require: false,
-    value: ' ViewStyle',
+    value: ' ViewStyle | ViewStyle[]',
   },
   children: {
     require: false,
@@ -46,12 +52,26 @@ export const BoxPropsConfig = {
 export type BoxProps = {
   padding?: Spacing;
   margin?: Spacing;
-  width?: number;
-  height?: number;
+  width?: DimensionValue;
+  height?: DimensionValue;
   backgroundColor?: string;
   radius?: number;
   flex?: number;
-  style?: ViewStyle;
+  flexDirection?:
+    | 'row'
+    | 'column'
+    | 'row-reverse'
+    | 'column-reverse'
+    | undefined;
+  justifyContent?:
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly'
+    | undefined;
+  style?: ViewStyle|ViewStyle[];
   children?: React.ReactNode;
 };
 
@@ -63,6 +83,8 @@ const Box = ({
   backgroundColor,
   radius,
   flex,
+  flexDirection,
+  justifyContent,
   style,
   children,
 }: BoxProps) => {
@@ -71,13 +93,15 @@ const Box = ({
     <View
       style={[
         {
-          padding: padding ? spacing[padding] : undefined,
-          margin: margin ? spacing[margin] : undefined,
           backgroundColor,
           borderRadius: radius,
           flex,
+          flexDirection,
+          justifyContent,
           width,
           height,
+          padding: padding ? spacing[padding] : undefined,
+          margin: margin ? spacing[margin] : undefined,
         },
         style,
       ]}

@@ -14,6 +14,8 @@ import { generateTheme } from '../utils/color';
 import { useTheme } from '../theme/ThemeContext';
 import { darkTheme, lightTheme, Theme, themeUsageGuide } from '../theme/themes';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import Box from '../components/Layout/Box';
+import SlideBox from '../components/Layout/SlideBox';
 
 interface Palette {
   base: string;
@@ -73,14 +75,14 @@ const ColorScreen = () => {
     return (
       `${item.description}\n\n` +
       `Kullanım Alanları:\n` +
-       `-----------------------\n` +
+      `-----------------------\n` +
       item.usage.map(u => `• ${u}`).join('\n')
     );
   };
 
   const renderColorBox = (color: string, label: string, key: keyof Theme) => (
     <TouchableOpacity
-    key={label}
+      key={label}
       onLongPress={() => {
         Alert.alert(label, formatUsageText(key));
       }}
@@ -107,91 +109,97 @@ const ColorScreen = () => {
         <Text style={[styles.title, { color: theme.onBackground }]}>
           Color Palette Generator
         </Text>
-
-        <View
-          style={[styles.pickerContainer, { backgroundColor: theme.surface }]}
+        <SlideBox
+        isShow={true}
+          textPosition="center"
+          title={'Selected Color: ' + baseColor.toUpperCase()}
         >
-          <Text style={[styles.selectedColorText, { color: theme.onSurface }]}>
-            Selected Color: {baseColor.toUpperCase()}
-          </Text>
-
-          <ColorPicker
-            color={baseColor}
-            onColorChange={setBaseColor}
-            onColorChangeComplete={handleColorChangeComplete}
-            thumbSize={40}
-            sliderSize={30}
-            noSnap={true}
-            row={false}
-            swatches={true}
-          />
-        </View>
-
-        {(toggleTheme ? lightTheme : darkTheme) && (
-          <View
-            style={[
-              styles.paletteContainer,
-              { backgroundColor: theme.surface },
-            ]}
+          <Box
+            style={[styles.pickerContainer, { backgroundColor: theme.surface }]}
           >
-            <View
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                alignSelf: 'center',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                borderRadius: 10,
-                margin: 4,
-                marginBottom: 20,
-                padding: 10,
-                backgroundColor: theme.background,
-              }}
+            <ColorPicker
+              color={baseColor}
+              onColorChange={setBaseColor}
+              onColorChangeComplete={handleColorChangeComplete}
+              thumbSize={40}
+              sliderSize={30}
+              noSnap={true}
+              row={false}
+              swatches={true}
+            />
+          </Box>
+        </SlideBox>
+        <SlideBox
+        isShow={true}
+        textPosition='center'
+        title={  "Genereted Colors "}
+        >
+          {(toggleTheme ? lightTheme : darkTheme) && (
+            <Box
+              style={[
+                styles.paletteContainer,
+                { backgroundColor: theme.surface },
+              ]}
             >
-              <Text
-                style={[styles.paletteTitle, { color: theme.onBackground }]}
-              >
-                Genereted Colors {toggleTheme ? '(Light)' : '(Dark)'}
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  setToggleTheme(!toggleTheme);
+              <Box
+                style={{
+                  flexDirection: 'row',
+                  width: '100%',
+                  alignSelf: 'center',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  borderRadius: 10,
+                  margin: 4,
+                  marginBottom: 20,
+                  padding: 4,
+                  backgroundColor: theme.background,
                 }}
               >
-                <Icon
-                  name={toggleTheme ? 'moon' : 'sun'}
-                  size={30}
-                  color={theme.onBackground}
-                />
-              </TouchableOpacity>
-            </View>
+                <Text
+                  style={[styles.paletteTitle, { flex:1, color: theme.onBackground }]}
+                >
+                 {toggleTheme ? '(Light)' : '(Dark)'}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    setToggleTheme(!toggleTheme);
+                  }}
+                >
+                  <Icon
+                    name={toggleTheme ? 'moon' : 'sun'}
+                    size={24}
+                    color={theme.onBackground}
+                  />
+                </TouchableOpacity>
+              </Box>
 
-            <View style={styles.paletteGrid}>
-              {Object.entries(toggleTheme ? lightTheme! : darkTheme!).map(
-                ([key, color]) =>
-                  renderColorBox(
-                    color,
-                    key.charAt(0).toUpperCase() + key.slice(1),
-                    key as keyof Theme,
-                  ),
-              )}
-            </View>
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderRadius: 4,
-                padding: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1,
-                backgroundColor: '#888',
-              }}
-              onPress={applyToTheme}
-            >
-              <Text>{'Uygula'}</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+              <Box style={styles.paletteGrid}>
+                {Object.entries(toggleTheme ? lightTheme! : darkTheme!).map(
+                  ([key, color]) =>
+                    renderColorBox(
+                      color,
+                      key.charAt(0).toUpperCase() + key.slice(1),
+                      key as keyof Theme,
+                    ),
+                )}
+              </Box>
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  borderRadius: 4,
+                  padding: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flex: 1,
+                  backgroundColor: '#888',
+                }}
+                onPress={applyToTheme}
+              >
+                <Text>{'Uygula'}</Text>
+              </TouchableOpacity>
+            </Box>
+          )}
+        </SlideBox>
       </ScrollView>
     </SafeAreaView>
   );
@@ -228,8 +236,8 @@ const styles = StyleSheet.create({
   },
   paletteContainer: {
     backgroundColor: '#fff',
-    margin: 20,
-    padding: 20,
+    margin: 4,
+    padding: 4,
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
