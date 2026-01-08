@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   ScrollView,
   TouchableOpacity,
   TextInput,
   Alert,
   SafeAreaView,
+  ColorValue,
 } from 'react-native';
 import ColorPicker from 'react-native-wheel-color-picker';
 import { generateTheme } from '../utils/color';
@@ -16,17 +16,18 @@ import { darkTheme, lightTheme, Theme, themeUsageGuide } from '../theme/themes';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import Box from '../components/Layout/Box';
 import SlideBox from '../components/Layout/SlideBox';
+import Text from '../components/Text/Text';
 
 interface Palette {
-  base: string;
-  light: string;
-  dark: string;
-  accent: string;
-  complementary: string;
+  base: ColorValue;
+  light: ColorValue;
+  dark: ColorValue;
+  accent: ColorValue;
+  complementary: ColorValue;
 }
 
 const ColorScreen = () => {
-  const [baseColor, setBaseColor] = useState('#ff0000');
+  const [baseColor, setBaseColor] = useState<ColorValue>('#ff0000');
   const [palette, setPalette] = useState<Palette | null>(null);
   const [lightTheme, setLightTheme] = useState<Theme | null>(null);
   const [darkTheme, setDarkTheme] = useState<Theme | null>(null);
@@ -34,7 +35,7 @@ const ColorScreen = () => {
 
   const { theme, setCustomTheme } = useTheme();
 
-  const handleColorChangeComplete = (color: string) => {
+  const handleColorChangeComplete = (color: ColorValue) => {
     setBaseColor(color);
     setPalette(generateTheme(color).palette);
     setLightTheme(generateTheme(color).light);
@@ -89,7 +90,7 @@ const ColorScreen = () => {
     >
       <View key={label} style={styles.colorItem}>
         <View style={[styles.colorBox, { backgroundColor: color }]} />
-        <Text style={styles.colorText}>{label}</Text>
+        <Text  maxlength={9} style={styles.colorText}>{label}</Text>
         <TextInput
           style={styles.colorInput}
           value={color}
@@ -110,15 +111,16 @@ const ColorScreen = () => {
           Color Palette Generator
         </Text>
         <SlideBox
+        
         isShow={true}
           textPosition="center"
-          title={'Selected Color: ' + baseColor.toUpperCase()}
+          title={'Selected Color: ' + baseColor.toString().toUpperCase()}
         >
           <Box
             style={[styles.pickerContainer, { backgroundColor: theme.surface }]}
           >
             <ColorPicker
-              color={baseColor}
+              color={baseColor.toString()}
               onColorChange={setBaseColor}
               onColorChangeComplete={handleColorChangeComplete}
               thumbSize={40}
@@ -264,6 +266,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     minWidth: '30%',
+    
   },
   colorBox: {
     width: 80,

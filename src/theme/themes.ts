@@ -1,20 +1,22 @@
+import { ColorValue } from "react-native";
+
 export interface Theme {
 
-  primary: string;
-  secondary: string;
-  accent: string;
+  primary: ColorValue;
+  secondary: ColorValue;
+  accent: ColorValue;
   
-  onPrimary: string;
-  onSecondary: string;
-  onAccent: string;
+  onPrimary: ColorValue;
+  onSecondary: ColorValue;
+  onAccent: ColorValue;
 
 
-  background: string;
-  surface: string;
-  border: string;
+  background: ColorValue;
+  surface: ColorValue;
+  border: ColorValue;
   
-  onBackground: string;
-  onSurface: string;
+  onBackground: ColorValue;
+  onSurface: ColorValue;
 
 
 

@@ -61,7 +61,7 @@ const RootStackNavigation = () => {
         <Stack.Screen
           options={{
             headerShown: true,
-            headerTintColor: theme.onBackground,
+            headerTintColor: theme.onBackground.toString(),
             headerTransparent: true,
             headerBackTitle: 'Geri'
         

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text as RNText, TextStyle } from 'react-native';
+import { StyleSheet, View, Text as RNText, TextStyle, ColorValue } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 
 export type TextVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -16,7 +16,7 @@ export const TextPorpsConfig = {
   },
   color: {
     require: false,
-    value: 'string',
+    value: 'ColorValue',
   },
   align: {
     require: false,
@@ -30,15 +30,20 @@ export const TextPorpsConfig = {
     require: true,
     value: 'React.ReactNode',
   },
+  maxlength: {
+    require: false,
+    value: 'number',
+  },
 };
 
 export interface TextProps {
   variant?: TextVariant;
   weight?: TextWeight;
-  color?: string;
+  color?: ColorValue;
   align?: 'left' | 'center' | 'right';
-  style?: TextStyle;
+  style?: TextStyle|TextStyle[];
   children: React.ReactNode;
+  maxlength?:number
 }
 
 const Text = ({
@@ -48,12 +53,23 @@ const Text = ({
   align,
   style,
   children,
+  maxlength,
 }: TextProps) => {
   const { theme, spacing, typography } = useTheme();
+
+  // Maxlength kontrolü
+  const processedChildren = React.useMemo(() => {
+    if (maxlength && typeof children === 'string' && children.length > maxlength) {
+      return children.substring(0, maxlength) + '...';
+    }
+    return children;
+  }, [children, maxlength]);
+
   return (
     <RNText
       style={[
         {
+          
           fontSize: variant ? typography.sizes[variant] : undefined,
           fontWeight: weight
             ? (typography.weights[weight] as TextStyle['fontWeight'])
@@ -63,8 +79,9 @@ const Text = ({
         },
         style,
       ]}
+      
     >
-      {children}
+      {processedChildren}
     </RNText>
   );
 };

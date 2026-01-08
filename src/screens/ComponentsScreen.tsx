@@ -51,7 +51,7 @@ const ComponentsScreen = () => {
 
     const section = Object.entries(grouped).map(([title, data]) => ({
       title,
-      data: collapsedSections[title] ? [] : data,
+      data: collapsedSections[title] ? data : [],
     }));
 
     setSections(section);
@@ -64,7 +64,7 @@ const ComponentsScreen = () => {
         { backgroundColor: useTheme().theme.background },
       ]}
     >
-      <View style={[styles.container, { padding: spacing.md }]}>
+      <Box style={[styles.container, { padding: spacing.md }]}>
         <InputText
           placeHolder="Search"
           value={searchText}
@@ -76,8 +76,18 @@ const ComponentsScreen = () => {
               color={theme.onBackground}
             />
           }
+          iconRight={
+            <Icon
+              name={searchText ? 'xmark' : ''}
+              size={20}
+              color={theme.onBackground}
+            />
+          }
+          rightIconOnPress={() => {
+            setSearchText('');
+          }}
         />
-
+        <Divider text="Componets" lenght={'35%'} size="sm" />
         <SectionList
           style={[styles.sectionList]}
           sections={sections}
@@ -95,7 +105,7 @@ const ComponentsScreen = () => {
                     size="sm"
                     iconRight={
                       <Icon
-                        name={isCollapsed ? 'angle-down' : 'angle-up'}
+                        name={isCollapsed ? 'angle-up' : 'angle-down'}
                         size={24}
                         color={theme.onSecondary}
                       />
@@ -111,7 +121,7 @@ const ComponentsScreen = () => {
                       backgroundColor: theme.secondary,
                     }}
                   ></Button>
-                {/* <Divider color={theme.secondary} size="xs" /> */}
+                  {/* <Divider color={theme.secondary} size="xs" /> */}
                 </Box>
               );
             }
@@ -129,8 +139,8 @@ const ComponentsScreen = () => {
             //   {section.title}
             // </Text>
           }
-          renderItem={({ item }) => (
-            <Box>
+          renderItem={({ item, index }) => (
+            <SlideBox title={item.name}>
               <Box
                 key={item.name + '_View'}
                 style={{
@@ -174,36 +184,41 @@ const ComponentsScreen = () => {
                   {item.getAvailableProps
                     ? Object.entries(item.getAvailableProps).map(
                         ([key, { require, value }]) => (
-                          <View
-                            key={item.name + '_TextView_' + key}
-                            style={{
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                            }}
-                          >
-                            <Text
-                              key={item.name + '_' + key}
+                          <Box key={item.name + '_ViewCol_' + key}>
+                            <Box
+                              padding="sm"
+                              key={item.name + '_TextView_' + key}
                               style={{
-                                color: theme.onSurface,
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
                               }}
-                            >{`${key} ${require ? '*' : '?'}`}</Text>
-                            <Text
-                              key={item.name + '_' + key + '_' + value}
-                              style={{
-                                color: theme.onSurface,
-                              }}
-                            >{`${value}`}</Text>
-                          </View>
+                            >
+                              <Text
+                                key={item.name + '_' + key}
+                                style={{
+                                  color: theme.onSurface,
+                                }}
+                              >{`${key} ${require ? '*' : '?'}`}</Text>
+
+                              <Text
+                                key={item.name + '_' + key + '_' + value}
+                                style={{
+                                  color: theme.onSurface,
+                                }}
+                              >{`${value}`}</Text>
+                            </Box>
+                            <Divider size="xs" />
+                          </Box>
                         ),
                       )
                     : null}
                 </SlideBox>
               </Box>
               <Divider size="sm" />
-            </Box>
+            </SlideBox>
           )}
         />
-      </View>
+      </Box>
     </SafeAreaView>
   );
 };
@@ -216,6 +231,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sectionList: {
+    overflow: 'scroll',
     flex: 1,
     width: '100%',
   },

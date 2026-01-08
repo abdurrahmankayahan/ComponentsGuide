@@ -10,6 +10,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ColorScreen from '../screens/ColorScreen';
 import PreviewScreen from '../screens/PreviewScreen';
 import PagesScreen from '../screens/PagesScreen';
+import FloatTabbar from '../components/Tabbars/FloatTabbar/FloatTabbar';
+import FloatButtonTabbar from '../components/Tabbars/FloatButtonTabbar/FloatButtonTabbar';
 
 const Tab = createBottomTabNavigator();
 const TabNavigation = () => {
@@ -26,6 +28,8 @@ const TabNavigation = () => {
 
   return (
     <Tab.Navigator
+    //tabBar={props=><FloatTabbar {...props}/>}
+    //tabBar={props=><FloatButtonTabbar {...props}/>}
       screenOptions={({ route }) => ({
         // headerBackground:()=><View style={{flex:1, backgroundColor:theme.theme.primary}}></View>,
         tabBarBackground: () => (
@@ -34,7 +38,7 @@ const TabNavigation = () => {
           ></View>
         ),
         headerTransparent: true,
-        headerTintColor: theme.primary,
+        headerTintColor: theme.primary.toString(),
         headerTitle: '',
         headerRight: () => (
           <TouchableOpacity
@@ -84,8 +88,11 @@ const TabNavigation = () => {
       <Tab.Screen name="Components" component={ComponentsScreen} />
       <Tab.Screen name="Pages" component={PagesScreen} />
 
-      <Tab.Screen options={() => ({})} name="Test" component={TestScreen} />
+      <Tab.Screen options={(focused)=>({})} name="Test" component={TestScreen} />
       <Tab.Screen name="Colors" component={ColorScreen} />
+
+
+
 
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>

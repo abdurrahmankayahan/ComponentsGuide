@@ -1,16 +1,17 @@
 import tinycolor from 'tinycolor2';
 import { Theme } from '../theme/themes';
+import { ColorValue } from 'react-native';
 
 /* ============================
    TYPES
 ============================ */
 
 interface Palette {
-  base: string;
-  light: string;
-  dark: string;
-  accent: string;
-  complementary: string;
+  base: ColorValue;
+  light: ColorValue;
+  dark: ColorValue;
+  accent: ColorValue;
+  complementary: ColorValue;
 }
 
 
@@ -25,12 +26,12 @@ const MIN_CONTRAST = 4.5;
    ON COLOR HELPER
 ============================ */
 
-const getOnColor = (bg: string): string => {
+const getOnColor = (bg: ColorValue): ColorValue => {
   const white = '#FFFFFF';
   const black = '#000000';
 
-  const whiteC = tinycolor.readability(bg, white);
-  const blackC = tinycolor.readability(bg, black);
+  const whiteC = tinycolor.readability(bg.toString(), white);
+  const blackC = tinycolor.readability(bg.toString(), black);
 
   if (whiteC >= MIN_CONTRAST) return white;
   if (blackC >= MIN_CONTRAST) return black;
@@ -43,13 +44,13 @@ const getOnColor = (bg: string): string => {
 ============================ */
 
 export const generateTheme = (
-  baseColor: string,
+  baseColor: ColorValue,
 ): {
   palette: Palette;
   light: Theme;
   dark: Theme;
 } => {
-  const base = tinycolor(baseColor);
+  const base = tinycolor(baseColor.toString());
 
   /* --------------------
      1️⃣ PALETTE

@@ -69,7 +69,7 @@ const PagesScreen = () => {
             <Button 
             fullWidth={true}
               title={item.name} 
-              iconRight={<Icon name='angle-right' size={24}/>}
+              iconRight={<Icon name='angle-right' color={theme.onPrimary} size={24}/>}
               onPress={() => 
                 navigation.navigate("Preview", { 
                   pageId: item.id,

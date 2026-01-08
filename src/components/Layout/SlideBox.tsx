@@ -36,7 +36,7 @@ const SlideBox = ({ title, textPosition, isShow, children }: SlideBoxProps) => {
   const [show, setShow] = useState(isShow);
   return (
     <Box
-      style={{ borderWidth: 1 }}
+      style={{ borderWidth: 1,}}
       radius={10}
       width="100%"
       margin="xs"
@@ -70,6 +70,7 @@ const SlideBox = ({ title, textPosition, isShow, children }: SlideBoxProps) => {
         </Pressable>
       </Box>
       <Box>{show && children}</Box>
+
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
   ActivityIndicator,
   DimensionValue,
@@ -22,11 +22,11 @@ export const ButtonPropsConfig = {
   },
   iconLeft: {
     require: false,
-    value: 'React.ReactNode',
+    value: 'ReactNode',
   },
   iconRight: {
     require: false,
-    value: 'React.ReactNode',
+    value: 'ReactNode',
   },
   variant: {
     require: false,
@@ -81,8 +81,8 @@ export type ButtonShape = 'round' | 'square';
 
 export type ButtonProps = {
   title?: string;
-  iconLeft?: React.ReactNode;
-  iconRight?: React.ReactNode;
+  iconLeft?: ReactNode;
+  iconRight?: ReactNode;
   variant?: ButtonVariant;
   shape?: ButtonShape;
   size?: ButtonSize;

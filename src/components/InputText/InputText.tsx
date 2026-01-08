@@ -1,9 +1,10 @@
-import React, { ReactNode } from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import Box from '../Layout/Box';
 import { useTheme } from '../../theme/ThemeContext';
 import { Spacing, Typography } from '../../theme/themes';
 import Text from '../Text/Text';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 
 export const InputTextPropsConfig = {
   placeHolder: {
@@ -38,6 +39,10 @@ export const InputTextPropsConfig = {
     require: false,
     value: ' ReactNode',
   },
+  rightIconOnPress: {
+    require: false,
+    value: ' ()=>void',
+  },
 } as const;
 export type InputTextProps = {
   placeHolder?: string;
@@ -48,6 +53,7 @@ export type InputTextProps = {
   fullWidth?: boolean;
   iconLeft?: ReactNode;
   iconRight?: ReactNode;
+  rightIconOnPress?: () => void;
 };
 
 const InputText = ({
@@ -59,8 +65,12 @@ const InputText = ({
   fullWidth = true,
   iconLeft,
   iconRight,
+  rightIconOnPress,
 }: InputTextProps) => {
   const theme = useTheme().theme;
+  const [show, setShow] = useState(isSecure);
+
+
   return (
     <Box
       style={[
@@ -76,13 +86,25 @@ const InputText = ({
         <TextInput
           style={[styles.textInputStye, { color: theme.onBackground }]}
           placeholder={placeHolder}
-          secureTextEntry={isSecure}
+          secureTextEntry={show}
           value={value}
           onChangeText={onChangeText}
           placeholderTextColor={'#555'}
           cursorColor={'#eee'}
         />
-        {iconRight && <Box style={styles.rightContainer}>{iconRight}</Box>}
+        {isSecure ? (
+          <Box style={styles.rightContainer}>
+            <Pressable onPress={() => setShow(!show)}>
+              <Icon name={!show ? 'eye-slash' : 'eye'} size={20} color={theme.onBackground}/>
+            </Pressable>
+          </Box>
+        ) : (
+          iconRight && (
+            <Box style={styles.rightContainer}>
+              <Pressable onPress={rightIconOnPress}>{iconRight}</Pressable>
+            </Box>
+          )
+        )}
       </Box>
       {descriptionText ? (
         <Text

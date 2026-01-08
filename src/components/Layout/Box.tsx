@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  ColorValue,
   DimensionValue,
   FlexStyle,
   StyleSheet,
@@ -30,7 +31,7 @@ export const BoxPropsConfig = {
   },
   backgroundColor: {
     require: false,
-    value: ' string',
+    value: ' ColorValue',
   },
   radius: {
     require: false,
@@ -54,7 +55,7 @@ export type BoxProps = {
   margin?: Spacing;
   width?: DimensionValue;
   height?: DimensionValue;
-  backgroundColor?: string;
+  backgroundColor?: ColorValue;
   radius?: number;
   flex?: number;
   flexDirection?:
